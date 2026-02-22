@@ -1,23 +1,16 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import Home from "./Home";
-import Admin from "./Admin";
-import Login from "./Login";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Admin from "./pages/Admin";
+import FilmeDetalhe from "./pages/FilmeDetalhe";
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
-      <nav style={{ padding: 20 }}>
-        <Link to="/">Home</Link> |{" "}
-        <Link to="/admin">Admin</Link>
-      </nav>
-
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/filme/:id" element={<FilmeDetalhe />} />
       </Routes>
     </BrowserRouter>
   );
 }
-
-export default App;

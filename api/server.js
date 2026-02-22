@@ -1,55 +1,35 @@
 const express = require("express");
 const cors = require("cors");
+const mongoose = require("mongoose");
+const Filme = require("./models/Filme");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-let filmes = [
-  {
-    id: 1,
-    titulo: "Matrix",
-    descricao: "Filme de ficção científica",
-    ano: 1999,
-    imagem: "https://m.media-amazon.com/images/I/51EG732BV3L.jpg"
-  }
-];
+mongoose.connect("mongodb://127.0.0.1:27017/projetofilmes")
+.then(() => console.log("MongoDB ligado"))
+.catch(err => console.log(err));
 
-// GET todos os filmes
-app.get("/filmes", (req, res) => {
+// GET
+app.get("/filmes", async (req, res) => {
+  const filmes = await Filme.find();
   res.json(filmes);
 });
 
-// POST criar filme
-app.post("/filmes", (req, res) => {
-  const novoFilme = {
-    id: Date.now(),
-    ...req.body
-  };
-
-  filmes.push(novoFilme);
-  res.json(novoFilme);
+// POST
+app.post("/filmes", async (req, res) => {
+  const filme = new Filme(req.body);
+  await filme.save();
+  res.json(filme);
 });
 
-// PUT editar filme
-app.put("/filmes/:id", (req, res) => {
-  const id = req.params.id;
-
-  filmes = filmes.map(f =>
-    f.id == id ? { ...f, ...req.body } : f
-  );
-
-  res.json({ message: "Filme atualizado" });
-});
-
-// DELETE apagar filme
-app.delete("/filmes/:id", (req, res) => {
-  const id = req.params.id;
-  filmes = filmes.filter(f => f.id != id);
-
-  res.json({ message: "Filme apagado" });
+// DELETE
+app.delete("/filmes/:id", async (req, res) => {
+  await Filme.findByIdAndDelete(req.params.id);
+  res.json({ ok: true });
 });
 
 app.listen(3000, () => {
-  console.log("API a correr em http://localhost:3000");
+  console.log("API http://localhost:3000");
 });
