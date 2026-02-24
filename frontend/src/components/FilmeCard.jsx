@@ -2,15 +2,17 @@ import { Link } from "react-router-dom";
 
 export default function FilmeCard({ filme }) {
   return (
-    <div className="filme-card">
+    <div className="card">
       <img src={filme.imagem} />
 
-      <h3>{filme.titulo}</h3>
-      <p>{filme.ano}</p>
+      <div className="card-body">
+        <h4>{filme.titulo}</h4>
+        <p>{filme.ano}</p>
 
-      <Link to={`/filme/${filme._id}`}>
-        <button>Ver detalhes</button>
-      </Link>
+        <Link to={`/filme/${filme._id}`}>
+          <button>Ver detalhes</button>
+        </Link>
+      </div>
     </div>
   );
 }
